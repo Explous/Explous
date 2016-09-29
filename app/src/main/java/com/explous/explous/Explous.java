@@ -44,7 +44,7 @@ public class Explous extends AppCompatActivity {
 
         for (int i = 0; i < 15; i ++) {
             Map<String, Object> temp = new HashMap<>();
-            temp.put("Title", "" + i);
+            temp.put("Title", "Title " + i);
             datas.add(temp);
         }
 
