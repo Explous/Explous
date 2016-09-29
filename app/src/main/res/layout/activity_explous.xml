@@ -32,9 +32,6 @@
 
     </LinearLayout>
 
-
-
-
     <ListView
         android:id="@+id/explous"
         android:layout_weight="1"
