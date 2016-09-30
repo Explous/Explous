@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="base">#434a54</color>
-    <color name="base_tablet">#656d78</color>
-    <color name="font_item">#ccd1d9</color>
+    <color name="base">#ffffff</color>
+    <color name="base_tablet">#dfddde</color>
+    <color name="font_item">#6c6c6c</color>
+    <color name="black">#464646</color>
 </resources>

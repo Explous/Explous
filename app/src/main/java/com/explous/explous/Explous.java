@@ -4,11 +4,14 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+
+import com.explous.explous.adapter.RecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Explous extends AppCompatActivity {
-    private ListView explous;
-    SimpleAdapter adapter;
+    private RecyclerView explous;
+    RecyclerAdapter adapter;
     List<Map<String, Object>> datas = new ArrayList<>();
 
     @Override
@@ -40,7 +43,6 @@ public class Explous extends AppCompatActivity {
     }
 
     private void init(){
-        explous = (ListView)findViewById(R.id.explous);
 
         for (int i = 0; i < 15; i ++) {
             Map<String, Object> temp = new HashMap<>();
@@ -48,7 +50,10 @@ public class Explous extends AppCompatActivity {
             datas.add(temp);
         }
 
-        adapter = new SimpleAdapter(this, datas, R.layout.item_explous, new String[]{"Title"}, new int[]{R.id.title});
+        explous = (RecyclerView)findViewById(R.id.explous);
+        explous.setLayoutManager(new LinearLayoutManager(this));
+        explous.setItemAnimator(new DefaultItemAnimator());
+        adapter = new RecyclerAdapter(this, datas);
         explous.setAdapter(adapter);
     }
 }
