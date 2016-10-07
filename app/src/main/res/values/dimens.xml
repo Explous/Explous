@@ -6,4 +6,5 @@
 
     //Padding
     <dimen name="item_padding">5dp</dimen>
+    <dimen name="item_margin">3dp</dimen>
 </resources>
