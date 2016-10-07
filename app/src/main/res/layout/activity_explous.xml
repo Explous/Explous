@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/base" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:paddingTop="@dimen/android_statusbar"
         android:paddingBottom="2dp"
-        android:background="@color/black"
+        android:background="@color/base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -19,14 +18,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:textColor="@color/base_tablet"
+                android:textColor="@color/base"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hello World!"
                 android:textSize="20sp"/>
 
             <TextView
-                android:textColor="@color/base_tablet"
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="This is a text!"/>

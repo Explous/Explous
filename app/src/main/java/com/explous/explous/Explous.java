@@ -22,6 +22,7 @@ public class Explous extends AppCompatActivity {
     private RecyclerView explous;
     RecyclerAdapter adapter;
     List<Map<String, Object>> datas = new ArrayList<>();
+    List<Map<String, Object>> datass = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +51,18 @@ public class Explous extends AppCompatActivity {
             datas.add(temp);
         }
 
+        for (int i = 0; i < 3; i ++) {
+            Map<String, Object> temp = new HashMap<>();
+            temp.put("Type", i);
+            temp.put("Title", "Title " + i);
+            temp.put("Datas", datas);
+            datass.add(temp);
+        }
+
         explous = (RecyclerView)findViewById(R.id.explous);
         explous.setLayoutManager(new LinearLayoutManager(this));
         explous.setItemAnimator(new DefaultItemAnimator());
-        adapter = new RecyclerAdapter(this, datas);
+        adapter = new RecyclerAdapter(this, datass);
         explous.setAdapter(adapter);
     }
 }
