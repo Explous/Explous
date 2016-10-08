@@ -39,24 +39,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.title.setText(temp.get("Title").toString());
         Integer type = Integer.parseInt(temp.get("Type").toString());
         List<Map<String, Object>> data = (ArrayList)temp.get("Datas");
-        ChildRecyclerAdapter adapter;
+        FolderRecyclerAdapter adapter;
         switch(type) {
             case 0:
                 holder.child.setLayoutManager(new GridLayoutManager(context, 2));
                 holder.child.setItemAnimator(new DefaultItemAnimator());
-                adapter = new ChildRecyclerAdapter(context, data);
+                adapter = new FolderRecyclerAdapter(context, data);
                 holder.child.setAdapter(adapter);
                 break;
             case 1:
                 holder.child.setLayoutManager(new LinearLayoutManager(context));
                 holder.child.setItemAnimator(new DefaultItemAnimator());
-                adapter = new ChildRecyclerAdapter(context, data);
+                adapter = new FolderRecyclerAdapter(context, data);
                 holder.child.setAdapter(adapter);
                 break;
             case 2:
                 holder.child.setLayoutManager(new LinearLayoutManager(context));
                 holder.child.setItemAnimator(new DefaultItemAnimator());
-                adapter = new ChildRecyclerAdapter(context, data);
+                adapter = new FolderRecyclerAdapter(context, data);
                 holder.child.setAdapter(adapter);
                 break;
             default:

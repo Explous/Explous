@@ -5,6 +5,6 @@
     <dimen name="android_statusbar">25dp</dimen>
 
     //Padding
-    <dimen name="item_padding">5dp</dimen>
-    <dimen name="item_margin">3dp</dimen>
+    <dimen name="padding">10dp</dimen>
+    <dimen name="margin">4dp</dimen>
 </resources>

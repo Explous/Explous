@@ -16,18 +16,18 @@ import java.util.Map;
  * Created by byte on 10/7/16.
  */
 
-public class ChildRecyclerAdapter extends RecyclerView.Adapter<ChildRecyclerAdapter.ViewHolder> {
+public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAdapter.ViewHolder> {
     private List<Map<String, Object>> datas;
     private Context context;
 
-    public ChildRecyclerAdapter(Context context, List datas) {
+    public FolderRecyclerAdapter(Context context, List datas) {
         this.context = context;
         this.datas = datas;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup group, final int i) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_explous_child, group, false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_explous_folder, group, false));
     }
 
     @Override
