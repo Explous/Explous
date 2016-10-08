@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 public class Explous extends AppCompatActivity {
     private RecyclerView explous;
+    MenuItem temp;
     RecyclerAdapter adapter;
     List<Map<String, Object>> datas = new ArrayList<>();
     List<Map<String, Object>> datass = new ArrayList<>();
@@ -65,5 +68,28 @@ public class Explous extends AppCompatActivity {
         explous.setItemAnimator(new DefaultItemAnimator());
         adapter = new RecyclerAdapter(this, datass);
         explous.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_test, menu);
+        temp = menu.findItem(R.id.action_audio);
+        temp.setVisible(false);
+        //searchView=(SearchView)menu.findItem(R.id.action_search).getActionView();
+        //searchViewListener();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_move:
+                temp.setVisible(true);
+                break;
+            //case R.id.action_mediascanner:fileManager.scanImage();break;
+            default:
+                break;
+        }
+        return true;
     }
 }
