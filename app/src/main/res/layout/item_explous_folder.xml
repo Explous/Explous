@@ -2,22 +2,24 @@
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin"
+    android:layout_margin="@dimen/space_small"
     cardview:cardCornerRadius="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:padding="@dimen/space_big">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_small"
+            android:layout_height="@dimen/icon_small"
             android:scaleType="fitXY"
             android:src="@mipmap/ic_launcher"/>
 
         <TextView
+            android:layout_marginLeft="@dimen/space_big"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"

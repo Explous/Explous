@@ -4,7 +4,14 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="android_statusbar">25dp</dimen>
 
-    //Padding
-    <dimen name="padding">10dp</dimen>
-    <dimen name="margin">4dp</dimen>
+    <dimen name="drawer_width">300dp</dimen>
+
+    //space
+    <dimen name="space_big">10dp</dimen>
+    <dimen name="space_small">4dp</dimen>
+
+    //icon
+    <dimen name="icon_small">30dp</dimen>
+    <dimen name="icon_normal">45dp</dimen>
+    <dimen name="icon_big">120dp</dimen>
 </resources>

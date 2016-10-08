@@ -48,16 +48,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 holder.child.setAdapter(adapter);
                 break;
             case 1:
-                holder.child.setLayoutManager(new LinearLayoutManager(context));
+                holder.child.setLayoutManager(new GridLayoutManager(context, 3));
                 holder.child.setItemAnimator(new DefaultItemAnimator());
-                adapter = new FolderRecyclerAdapter(context, data);
-                holder.child.setAdapter(adapter);
+                ImageRecyclerAdapter adapter00 = new ImageRecyclerAdapter(context, data);
+                holder.child.setAdapter(adapter00);
                 break;
             case 2:
                 holder.child.setLayoutManager(new LinearLayoutManager(context));
                 holder.child.setItemAnimator(new DefaultItemAnimator());
-                adapter = new FolderRecyclerAdapter(context, data);
-                holder.child.setAdapter(adapter);
+                DocumentRecyclerAdapter adapter01 = new DocumentRecyclerAdapter(context, data);
+                holder.child.setAdapter(adapter01);
                 break;
             default:
                 break;
