@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,20 +21,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Explous extends AppCompatActivity {
+public class Explous extends AppCompatActivity{
     private RecyclerView explous;
-    MenuItem temp;
+
+    LinearLayoutManager linearLayoutManager;
+    Toolbar toolbar;
+    MenuItem[] menuItems = new MenuItem[5];
     RecyclerAdapter adapter;
     List<Map<String, Object>> datas = new ArrayList<>();
     List<Map<String, Object>> datass = new ArrayList<>();
+    List<Integer> menuIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explous);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_actionbar));
+
         initUI();
+        initActionBar();
         init();
+    }
+
+    private void initActionBar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_actionbar));
     }
 
     private void initUI(){
@@ -63,8 +75,15 @@ public class Explous extends AppCompatActivity {
             datass.add(temp);
         }
 
+        menuIds.add(R.id.action_folder);
+        menuIds.add(R.id.action_image);
+        menuIds.add(R.id.action_video);
+        menuIds.add(R.id.action_audio);
+        menuIds.add(R.id.action_document);
+
         explous = (RecyclerView)findViewById(R.id.explous);
-        explous.setLayoutManager(new LinearLayoutManager(this));
+        linearLayoutManager = new LinearLayoutManager(this);
+        explous.setLayoutManager(linearLayoutManager);
         explous.setItemAnimator(new DefaultItemAnimator());
         adapter = new RecyclerAdapter(this, datass);
         explous.setAdapter(adapter);
@@ -72,21 +91,44 @@ public class Explous extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_test, menu);
-        temp = menu.findItem(R.id.action_audio);
-        temp.setVisible(false);
-        //searchView=(SearchView)menu.findItem(R.id.action_search).getActionView();
-        //searchViewListener();
+        getMenuInflater().inflate(R.menu.menu_tag, menu);
+        //temp.setVisible(false);
+        menuItems[0] = menu.findItem(R.id.action_folder);
+        menuItems[1] = menu.findItem(R.id.action_image);
+        menuItems[2] = menu.findItem(R.id.action_video);
+        menuItems[3] = menu.findItem(R.id.action_audio);
+        menuItems[4] = menu.findItem(R.id.action_document);
         return true;
+    }
+
+    private int getMenuIdPosition(int id) {
+        int position;
+        for (position = 0; position < menuIds.size(); position ++) {
+            Integer temp = menuIds.get(position);
+            if (temp == id) break;
+        }
+        return position;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_move:
-                temp.setVisible(true);
+            case R.id.action_folder:
+                linearLayoutManager.scrollToPosition(0);
+               // temp.setVisible(true);
                 break;
-            //case R.id.action_mediascanner:fileManager.scanImage();break;
+            case R.id.action_audio:
+                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_audio));
+                break;
+            case R.id.action_image:
+                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_image));
+                break;
+            case R.id.action_video:
+                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_video));
+                break;
+            case R.id.action_document:
+                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_document));
+                break;
             default:
                 break;
         }

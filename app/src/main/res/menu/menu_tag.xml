@@ -1,14 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_copy" android:orderInCategory="100"
+    <item android:id="@+id/action_folder" android:orderInCategory="100"
         android:title="Fod" app:showAsAction="always"/>
-    <item android:id="@+id/action_move" android:orderInCategory="100"
+    <item android:id="@+id/action_image" android:orderInCategory="100"
         android:title="Img" app:showAsAction="always"/>
     <item android:id="@+id/action_video" android:orderInCategory="100"
         android:title="Vid" app:showAsAction="always"/>
     <item android:id="@+id/action_audio" android:orderInCategory="100"
         android:title="Aud" app:showAsAction="always"/>
-    <item android:id="@+id/action_rename" android:orderInCategory="100"
+    <item android:id="@+id/action_document" android:orderInCategory="100"
         android:title="Doc" app:showAsAction="always"/>
     <!--<item android:id="@+id/action_delete" android:orderInCategory="100" android:title="Delete"
         android:icon="@mipmap/delete" app:showAsAction="always"/>-->
