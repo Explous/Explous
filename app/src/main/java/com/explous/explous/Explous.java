@@ -37,18 +37,11 @@ public class Explous extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explous);
 
-        initUI();
-        initActionBar();
+        initWindow();
         init();
     }
 
-    private void initActionBar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_actionbar));
-    }
-
-    private void initUI(){
+    private void initWindow(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -57,6 +50,10 @@ public class Explous extends AppCompatActivity{
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
         } else getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_actionbar));
     }
 
     private void init(){
