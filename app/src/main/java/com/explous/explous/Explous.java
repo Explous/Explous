@@ -15,21 +15,21 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.explous.explous.adapter.RecyclerAdapter;
+import com.explous.explous.fileoperate.GetFiles;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Explous extends AppCompatActivity{
     private RecyclerView explous;
+    GetFiles  funcGetFiles;
 
     LinearLayoutManager linearLayoutManager;
     Toolbar toolbar;
     MenuItem[] menuItems = new MenuItem[5];
     RecyclerAdapter adapter;
     List<Map<String, Object>> datas = new ArrayList<>();
-    List<Map<String, Object>> datass = new ArrayList<>();
     List<Integer> menuIds = new ArrayList<>();
 
     @Override
@@ -58,19 +58,9 @@ public class Explous extends AppCompatActivity{
 
     private void init(){
 
-        for (int i = 0; i < 15; i ++) {
-            Map<String, Object> temp = new HashMap<>();
-            temp.put("Title", "Title " + i);
-            datas.add(temp);
-        }
+        funcGetFiles = new GetFiles(this);
 
-        for (int i = 0; i < 3; i ++) {
-            Map<String, Object> temp = new HashMap<>();
-            temp.put("Type", i);
-            temp.put("Title", "Title " + i);
-            temp.put("Datas", datas);
-            datass.add(temp);
-        }
+        Value.types.add(Value.FOLDER);
 
         menuIds.add(R.id.action_folder);
         menuIds.add(R.id.action_image);
@@ -82,8 +72,11 @@ public class Explous extends AppCompatActivity{
         linearLayoutManager = new LinearLayoutManager(this);
         explous.setLayoutManager(linearLayoutManager);
         explous.setItemAnimator(new DefaultItemAnimator());
-        adapter = new RecyclerAdapter(this, datass);
+        adapter = new RecyclerAdapter(this, datas, funcGetFiles);
+        adapter.setChildDatas(funcGetFiles.folders, funcGetFiles.images, funcGetFiles.audios, funcGetFiles.videos, funcGetFiles.documents);
         explous.setAdapter(adapter);
+        funcGetFiles.getFiles();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -116,14 +109,18 @@ public class Explous extends AppCompatActivity{
                 break;
             case R.id.action_audio:
                 linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_audio));
+                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_audio));
                 break;
             case R.id.action_image:
+                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_image));
                 linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_image));
                 break;
             case R.id.action_video:
                 linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_video));
+                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_video));
                 break;
             case R.id.action_document:
+                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_document));
                 linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_document));
                 break;
             default:

@@ -1,6 +1,7 @@
 package com.explous.explous.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +18,30 @@ import java.util.Map;
  */
 
 public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAdapter.ViewHolder> {
-    private List<Map<String, Object>> datas;
+    public List<Map<String, Object>> datas;
     private Context context;
+    private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
     public FolderRecyclerAdapter(Context context, List datas) {
         this.context = context;
         this.datas = datas;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClickListener(View view, int position);
+    }
+
+    public interface OnItemLongClickListener {
+        void onItemLongClickListener(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
     }
 
     @Override
@@ -31,9 +50,24 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         Map<String, Object> temp = datas.get(position);
-        holder.title.setText(temp.get("Title").toString());
+        holder.title.setText(temp.get("Name").toString());
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClickListener(view, position);
+            }
+        });
+
+        holder.container.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                onItemLongClickListener.onItemLongClickListener(view, position);
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -43,9 +77,11 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
+        public CardView container;
         public ViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
+            container = (CardView) view.findViewById(R.id.container);
         }
     }
 }
