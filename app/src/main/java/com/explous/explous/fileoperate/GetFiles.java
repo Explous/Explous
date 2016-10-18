@@ -6,12 +6,15 @@ import android.database.Cursor;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
+
+import com.explous.explous.R;
+import com.explous.explous.Value;
+import com.explous.explous.entity.DocumentItemEntity;
+import com.explous.explous.entity.FolderItemEntity;
+import com.explous.explous.entity.MediaItemEntity;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2016/10/14.
@@ -20,14 +23,9 @@ import java.util.Map;
 public class GetFiles {
     private Context context;
 
-    public List<Map<String, Object>> folders = new ArrayList<>();
-    public List<Map<String, Object>> images = new ArrayList<>();
-    public List<Map<String, Object>> videos = new ArrayList<>();
-    public List<Map<String, Object>> audios = new ArrayList<>();
-    public List<Map<String, Object>> documents = new ArrayList<>();
-
     public File[] files;
-    public File currentPath = Environment.getExternalStorageDirectory();;
+    private File basePath = Environment.getExternalStorageDirectory();
+    public File currentPath = Environment.getExternalStorageDirectory();
     ContentResolver cr;
     Cursor cursor;
     String[] projection = {MediaStore.Audio.Media._ID};
@@ -39,69 +37,93 @@ public class GetFiles {
         cr = context.getContentResolver();
     }
 
-    public void getFiles() {
+    public void getFiles(char action, int position) {
+        if (action == Value.ACTION_NEXT) {
+            currentPath = files[position];
+        } else if (action == Value.ACTION_PREV) {
+            currentPath = new File(currentPath.getPath().toString().substring(0, currentPath.getPath().toString().lastIndexOf('/')) + '/');
+        }
+
         files = currentPath.listFiles();
-        folders.clear();
-        images.clear();
-        videos.clear();
-        audios.clear();
-        documents.clear();
+
+        Value.clearList();
 
         for (int i = 0; i < files.length; i ++ ) {
             File temp = files[i];
             if (temp.isHidden())
                 continue;
-            Map<String, Object> map = new HashMap<>();
             if (temp.isDirectory()) {
-                map.put("Type", "Show");
-                map.put("Name", temp.getName());
-                map.put("Position", i);
-                folders.add(map);
+                FolderItemEntity entity = new FolderItemEntity();
+                entity.setIcon(R.mipmap.ic_launcher);
+                entity.setName(temp.getName());
+                entity.setPosition(i);
+                Value.folders.add(entity);
             } else {
-                getFileType(temp);
+                getFileType(temp, i);
             }
         }
 
-       /* for (File temp : files) {
-            if (temp.isHidden())
-                continue;
-            Map<String, Object> map = new HashMap<>();
-            if (temp.isDirectory()) {
-                map.put("Type", "Show");
-                map.put("Name", temp.getName());
-                folders.add(map);
-            } else {
-                getFileType(temp);
-            }
-        }*/
+        Value.checkTypes();
+        Value.adapter.notifyDataSetChanged();
+
+        if (currentPath.getName().equals("0"))
+            Value.toolbar.setTitle("SDCard");
+        else
+            Value.toolbar.setTitle(currentPath.getName());
     }
 
-    private void getFileType(File file) {
+    private void getFileType(File file, int position) {
         int flag = file.getName().lastIndexOf('.');
-        Map<String, Object> map = new HashMap<>();
-        map.put("Name", file.getName());
+
         if (flag > 0) {
             String extension = file.getName().substring(flag + 1);
             String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+
             if (mime != null) {
                 String mimeHead = mime.substring(0, mime.lastIndexOf('/'));
                 if (mimeHead.equals("image")) {
-                    images.add(map);
+                    MediaItemEntity entity = new MediaItemEntity();
+                    entity.setName(file.getName());
+                    entity.setIconID(R.mipmap.ic_launcher);
+                    entity.setPosition(position);
+                    Value.images.add(entity);
                     return;
                 }
                 if (mimeHead.equals("audio")) {
-                    audios.add(map);
+                    MediaItemEntity entity = new MediaItemEntity();
+                    entity.setName(file.getName());
+                    entity.setIconID(R.mipmap.ic_launcher);
+                    entity.setPosition(position);
+                    Value.audios.add(entity);
                     return;
                 }
                 if (mimeHead.equals("video")) {
-                    videos.add(map);
+                    MediaItemEntity entity = new MediaItemEntity();
+                    entity.setName(file.getName());
+                    entity.setIconID(R.mipmap.ic_launcher);
+                    entity.setPosition(position);
+                    Value.videos.add(entity);
                     return;
                 }
 
-                documents.add(map);
+                addUnkownDocument(file, position);
                 return;
             }
         }
-        documents.add(map);
+        addUnkownDocument(file, position);
+    }
+
+    private void addUnkownDocument(File file, int position) {
+        DocumentItemEntity entity = new DocumentItemEntity();
+        entity.setPosition(position);
+        entity.setName(file.getName());
+        entity.setIconID(R.mipmap.ic_launcher);
+        Value.documents.add(entity);
+    }
+
+    public boolean checkPathTop() {
+        if (currentPath.getPath().equals(basePath.getPath()))
+            return true;
+        else return false;
     }
 }

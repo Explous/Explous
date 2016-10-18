@@ -17,20 +17,16 @@ import android.view.WindowManager;
 import com.explous.explous.adapter.RecyclerAdapter;
 import com.explous.explous.fileoperate.GetFiles;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import static com.explous.explous.Value.adapter;
+import static com.explous.explous.Value.menuItems;
+import static com.explous.explous.Value.toolbar;
 
 public class Explous extends AppCompatActivity{
     private RecyclerView explous;
     GetFiles  funcGetFiles;
 
     LinearLayoutManager linearLayoutManager;
-    Toolbar toolbar;
-    MenuItem[] menuItems = new MenuItem[5];
-    RecyclerAdapter adapter;
-    List<Map<String, Object>> datas = new ArrayList<>();
-    List<Integer> menuIds = new ArrayList<>();
+    int[] menuIds = {R.id.action_folder, R.id.action_image, R.id.action_video, R.id.action_audio, R.id.action_document};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +58,21 @@ public class Explous extends AppCompatActivity{
 
         Value.types.add(Value.FOLDER);
 
-        menuIds.add(R.id.action_folder);
-        menuIds.add(R.id.action_image);
-        menuIds.add(R.id.action_video);
-        menuIds.add(R.id.action_audio);
-        menuIds.add(R.id.action_document);
-
         explous = (RecyclerView)findViewById(R.id.explous);
         linearLayoutManager = new LinearLayoutManager(this);
         explous.setLayoutManager(linearLayoutManager);
         explous.setItemAnimator(new DefaultItemAnimator());
-        adapter = new RecyclerAdapter(this, datas, funcGetFiles);
-        adapter.setChildDatas(funcGetFiles.folders, funcGetFiles.images, funcGetFiles.audios, funcGetFiles.videos, funcGetFiles.documents);
+        adapter = new RecyclerAdapter(this, funcGetFiles);
         explous.setAdapter(adapter);
-        funcGetFiles.getFiles();
-        adapter.notifyDataSetChanged();
+    }
+
+    private int getMenuIdPosition(int id) {
+        int position;
+        for (position = 0; position < menuIds.length; position ++) {
+            Integer temp = menuIds[position];
+            if (temp == id) break;
+        }
+        return position;
     }
 
     @Override
@@ -88,16 +84,8 @@ public class Explous extends AppCompatActivity{
         menuItems[2] = menu.findItem(R.id.action_video);
         menuItems[3] = menu.findItem(R.id.action_audio);
         menuItems[4] = menu.findItem(R.id.action_document);
+        funcGetFiles.getFiles(Value.ACTION_NONE, 0);
         return true;
-    }
-
-    private int getMenuIdPosition(int id) {
-        int position;
-        for (position = 0; position < menuIds.size(); position ++) {
-            Integer temp = menuIds.get(position);
-            if (temp == id) break;
-        }
-        return position;
     }
 
     @Override
@@ -127,5 +115,13 @@ public class Explous extends AppCompatActivity{
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (funcGetFiles.checkPathTop())
+            finish();
+        else
+            funcGetFiles.getFiles(Value.ACTION_PREV, 0);
     }
 }

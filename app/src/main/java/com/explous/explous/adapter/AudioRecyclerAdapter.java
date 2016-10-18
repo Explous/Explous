@@ -13,31 +13,31 @@ import com.explous.explous.Value;
 import com.explous.explous.entity.MediaItemEntity;
 
 /**
- * Created by Administrator on 2016/10/8.
+ * Created by Administrator on 2016/10/18.
  */
 
-public class ImageRecyclerAdapter extends RecyclerView.Adapter<ImageRecyclerAdapter.ViewHolder> {
+public class AudioRecyclerAdapter extends RecyclerView.Adapter<AudioRecyclerAdapter.ViewHolder> {
     private Context context;
 
-    public ImageRecyclerAdapter(Context context) {
+    public AudioRecyclerAdapter(Context context) {
         this.context = context;
     }
 
     @Override
-    public ImageRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup group, final int i) {
+    public ViewHolder onCreateViewHolder(ViewGroup group, final int i) {
         return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_explous_image, group, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        MediaItemEntity temp = Value.images.get(position);
+        MediaItemEntity temp = Value.audios.get(position);
         holder.title.setText(temp.getName());
         holder.icon.setImageResource(temp.getIconID());
     }
 
     @Override
     public int getItemCount() {
-        return Value.images.size();
+        return Value.audios.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

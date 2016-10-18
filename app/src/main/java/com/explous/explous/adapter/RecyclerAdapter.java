@@ -3,6 +3,7 @@ package com.explous.explous.adapter;
 import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,36 +14,17 @@ import com.explous.explous.R;
 import com.explous.explous.Value;
 import com.explous.explous.fileoperate.GetFiles;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by Administrator on 2016/9/30.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    private List<Map<String, Object>> datas;
     private Context context;
     private GetFiles funcGetFiles;
-    private List<Map<String, Object>> folders;
-    private List<Map<String, Object>> images;
-    private List<Map<String, Object>> audios;
-    private List<Map<String, Object>> videos;
-    private List<Map<String, Object>> documents;
 
 
-    public RecyclerAdapter(Context context, List datas, GetFiles funcGetFiles) {
+    public RecyclerAdapter(Context context, GetFiles funcGetFiles) {
         this.context = context;
-        this.datas = datas;
         this.funcGetFiles = funcGetFiles;
-    }
-
-    public void setChildDatas(List<Map<String, Object>> folders, List<Map<String, Object>> images, List<Map<String, Object>> audios, List<Map<String, Object>> videos, List<Map<String, Object>> documents) {
-        this.folders = folders;
-        this.images = images;
-        this.audios = audios;
-        this.videos = videos;
-        this.documents = documents;
-
     }
 
     @Override
@@ -55,35 +37,45 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         char type = Value.types.get(i);
         switch (type) {
             case Value.FOLDER:
+                holder.title.setText(R.string.folder);
                 holder.child.setLayoutManager(new GridLayoutManager(context, 2));
                 holder.child.setItemAnimator(new DefaultItemAnimator());
-                FolderRecyclerAdapter folderRecyclerAdapter = new FolderRecyclerAdapter(context, folders);
+                FolderRecyclerAdapter folderRecyclerAdapter = new FolderRecyclerAdapter(context);
                 folderRecyclerAdapter.setOnItemClickListener(new FolderRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClickListener(View view, int position) {
-                        int i = (int)folders.get(position).get("Position");
-                        funcGetFiles.currentPath = funcGetFiles.files[i];
-                        funcGetFiles.getFiles();
-                        notifyDataSetChanged();
+                        funcGetFiles.getFiles(Value.ACTION_NEXT, Value.folders.get(position).getPosition());
                     }
                 });
                 holder.child.setAdapter(folderRecyclerAdapter);
                 break;
             case Value.IMAGE:
-               /* holder.child.setLayoutManager(new GridLayoutManager(context, 3));
+                holder.title.setText(R.string.image);
+                holder.child.setLayoutManager(new GridLayoutManager(context, 3));
                 holder.child.setItemAnimator(new DefaultItemAnimator());
-                ImageRecyclerAdapter adapter00 = new ImageRecyclerAdapter(context, data);
-                holder.child.setAdapter(adapter00);*/
+                ImageRecyclerAdapter imageRecyclerAdapter = new ImageRecyclerAdapter(context);
+                holder.child.setAdapter(imageRecyclerAdapter);
                 break;
             case Value.AUDIO:
-               /* holder.child.setLayoutManager(new LinearLayoutManager(context));
+                holder.title.setText(R.string.audio);
+                holder.child.setLayoutManager(new GridLayoutManager(context, 3));
                 holder.child.setItemAnimator(new DefaultItemAnimator());
-                DocumentRecyclerAdapter adapter01 = new DocumentRecyclerAdapter(context, data);
-                holder.child.setAdapter(adapter01);*/
+                AudioRecyclerAdapter audioRecyclerAdapter = new AudioRecyclerAdapter(context);
+                holder.child.setAdapter(audioRecyclerAdapter);
                 break;
             case Value.VIDEO:
+                holder.title.setText(R.string.video);
+                holder.child.setLayoutManager(new GridLayoutManager(context, 3));
+                holder.child.setItemAnimator(new DefaultItemAnimator());
+                VideoRecyclerAdapter videoRecyclerAdapter = new VideoRecyclerAdapter(context);
+                holder.child.setAdapter(videoRecyclerAdapter);
                 break;
             case Value.DOCUMENT:
+                holder.title.setText(R.string.document);
+                holder.child.setLayoutManager(new LinearLayoutManager(context));
+                holder.child.setItemAnimator(new DefaultItemAnimator());
+                DocumentRecyclerAdapter documentRecyclerAdapter = new DocumentRecyclerAdapter(context);
+                holder.child.setAdapter(documentRecyclerAdapter);
                 break;
             default:
                 break;

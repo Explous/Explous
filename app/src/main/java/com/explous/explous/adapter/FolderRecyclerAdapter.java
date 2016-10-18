@@ -6,26 +6,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.explous.explous.R;
+import com.explous.explous.Value;
+import com.explous.explous.entity.FolderItemEntity;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by byte on 10/7/16.
  */
 
 public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAdapter.ViewHolder> {
-    public List<Map<String, Object>> datas;
     private Context context;
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public FolderRecyclerAdapter(Context context, List datas) {
+    public FolderRecyclerAdapter(Context context) {
         this.context = context;
-        this.datas = datas;
     }
 
     public interface OnItemClickListener {
@@ -51,8 +50,9 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Map<String, Object> temp = datas.get(position);
-        holder.title.setText(temp.get("Name").toString());
+        FolderItemEntity temp = Value.folders.get(position);
+        holder.title.setText(temp.getName());
+        holder.icon.setImageResource(temp.getIcon());
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,28 +60,30 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
             }
         });
 
-        holder.container.setOnLongClickListener(new View.OnLongClickListener() {
+       /* holder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 onItemLongClickListener.onItemLongClickListener(view, position);
                 return true;
             }
-        });
+        });*/
 
     }
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        return Value.folders.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public CardView container;
+        public ImageView icon;
         public ViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             container = (CardView) view.findViewById(R.id.container);
+            icon = (ImageView) view.findViewById(R.id.icon);
         }
     }
 }
