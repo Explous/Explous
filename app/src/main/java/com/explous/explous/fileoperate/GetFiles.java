@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
 
 import com.explous.explous.R;
 import com.explous.explous.Value;
@@ -45,6 +44,8 @@ public class GetFiles {
         }
 
         files = currentPath.listFiles();
+        if (files == null)
+            return;
 
         Value.clearList();
 

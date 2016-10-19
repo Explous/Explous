@@ -1,8 +1,12 @@
 package com.explous.explous;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,17 +28,29 @@ import static com.explous.explous.Value.toolbar;
 public class Explous extends AppCompatActivity{
     private RecyclerView explous;
     GetFiles  funcGetFiles;
+    private int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
 
     LinearLayoutManager linearLayoutManager;
-    int[] menuIds = {R.id.action_folder, R.id.action_image, R.id.action_video, R.id.action_audio, R.id.action_document};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explous);
 
+        initPermission();
         initWindow();
         init();
+    }
+
+    private void initPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                //申请WRITE_EXTERNAL_STORAGE权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+            }
+        }
     }
 
     private void initWindow(){
@@ -56,8 +72,6 @@ public class Explous extends AppCompatActivity{
 
         funcGetFiles = new GetFiles(this);
 
-        Value.types.add(Value.FOLDER);
-
         explous = (RecyclerView)findViewById(R.id.explous);
         linearLayoutManager = new LinearLayoutManager(this);
         explous.setLayoutManager(linearLayoutManager);
@@ -68,8 +82,8 @@ public class Explous extends AppCompatActivity{
 
     private int getMenuIdPosition(int id) {
         int position;
-        for (position = 0; position < menuIds.length; position ++) {
-            Integer temp = menuIds[position];
+        for (position = 0; position < Value.types.size(); position ++) {
+            Integer temp = Value.types.get(position);
             if (temp == id) break;
         }
         return position;
@@ -84,6 +98,7 @@ public class Explous extends AppCompatActivity{
         menuItems[2] = menu.findItem(R.id.action_video);
         menuItems[3] = menu.findItem(R.id.action_audio);
         menuItems[4] = menu.findItem(R.id.action_document);
+        //Ensure the meuitems have benn init and than get files
         funcGetFiles.getFiles(Value.ACTION_NONE, 0);
         return true;
     }
@@ -97,18 +112,14 @@ public class Explous extends AppCompatActivity{
                 break;
             case R.id.action_audio:
                 linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_audio));
-                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_audio));
                 break;
             case R.id.action_image:
-                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_image));
                 linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_image));
                 break;
             case R.id.action_video:
                 linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_video));
-                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_video));
                 break;
             case R.id.action_document:
-                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_document));
                 linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_document));
                 break;
             default:

@@ -34,7 +34,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int i) {
-        char type = Value.types.get(i);
+        int type = Value.types.get(i);
         switch (type) {
             case Value.FOLDER:
                 holder.title.setText(R.string.folder);

@@ -21,17 +21,17 @@ public class Value{
     public static final char ACTION_PREV = '2';
     public static final char ACTION_NONE = '0';
 
-    public static final char FOLDER = '0';
-    public static final char IMAGE = '1';
-    public static final char VIDEO = '2';
-    public static final char AUDIO = '3';
-    public static final char DOCUMENT = '4';
+    public static final int FOLDER = R.id.action_folder;
+    public static final int IMAGE = R.id.action_image;
+    public static final int VIDEO = R.id.action_video;
+    public static final int AUDIO = R.id.action_audio;
+    public static final int DOCUMENT = R.id.action_document;
 
     public static RecyclerAdapter adapter;
     public static Toolbar toolbar;
 
     //User for check which file type should to be show on list
-    public static List<Character> types = new ArrayList<>();
+    public static List<Integer> types = new ArrayList<>();
     //User for control the menu items
     public static MenuItem[] menuItems = new MenuItem[5];
 
