@@ -17,20 +17,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.explous.explous.Init.InitAdapter;
 import com.explous.explous.adapter.RecyclerAdapter;
 import com.explous.explous.fileoperate.GetFiles;
 
 import static com.explous.explous.Value.adapter;
+import static com.explous.explous.Value.linearLayoutManager;
 import static com.explous.explous.Value.menuItems;
 import static com.explous.explous.Value.toolbar;
 
-public class Explous extends AppCompatActivity{
+public class Explous extends AppCompatActivity {
     private RecyclerView explous;
-    GetFiles  funcGetFiles;
-    private int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
-
-    LinearLayoutManager linearLayoutManager;
+    GetFiles funcGetFiles;
+    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class Explous extends AppCompatActivity{
         }
     }
 
-    private void initWindow(){
+    private void initWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -66,23 +68,27 @@ public class Explous extends AppCompatActivity{
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_actionbar));
+        Value.themeHead = (TextView) findViewById(R.id.theme_head);
     }
 
-    private void init(){
-
+    private void init() {
+        Value.explous = this;
+        Value.menuInflater = getMenuInflater();
         funcGetFiles = new GetFiles(this);
 
-        explous = (RecyclerView)findViewById(R.id.explous);
+        new InitAdapter(this, funcGetFiles);
+
+        explous = (RecyclerView) findViewById(R.id.explous);
         linearLayoutManager = new LinearLayoutManager(this);
         explous.setLayoutManager(linearLayoutManager);
         explous.setItemAnimator(new DefaultItemAnimator());
-        adapter = new RecyclerAdapter(this, funcGetFiles);
+        adapter = new RecyclerAdapter(this);
         explous.setAdapter(adapter);
     }
 
     private int getMenuIdPosition(int id) {
         int position;
-        for (position = 0; position < Value.types.size(); position ++) {
+        for (position = 0; position < Value.types.size(); position++) {
             Integer temp = Value.types.get(position);
             if (temp == id) break;
         }
@@ -92,7 +98,6 @@ public class Explous extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_tag, menu);
-        //temp.setVisible(false);
         menuItems[0] = menu.findItem(R.id.action_folder);
         menuItems[1] = menu.findItem(R.id.action_image);
         menuItems[2] = menu.findItem(R.id.action_video);
@@ -107,20 +112,19 @@ public class Explous extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_folder:
-                linearLayoutManager.scrollToPosition(0);
-               // temp.setVisible(true);
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
                 break;
             case R.id.action_audio:
-                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_audio));
+                linearLayoutManager.scrollToPositionWithOffset(getMenuIdPosition(R.id.action_audio), 0);
                 break;
             case R.id.action_image:
-                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_image));
+                linearLayoutManager.scrollToPositionWithOffset(getMenuIdPosition(R.id.action_image), 0);
                 break;
             case R.id.action_video:
-                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_video));
+                linearLayoutManager.scrollToPositionWithOffset(getMenuIdPosition(R.id.action_video), 0);
                 break;
             case R.id.action_document:
-                linearLayoutManager.scrollToPosition(getMenuIdPosition(R.id.action_document));
+                linearLayoutManager.scrollToPositionWithOffset(getMenuIdPosition(R.id.action_document), 0);
                 break;
             default:
                 break;
@@ -129,10 +133,43 @@ public class Explous extends AppCompatActivity{
     }
 
     @Override
-    public void onBackPressed(){
-        if (funcGetFiles.checkPathTop())
+    public void onBackPressed() {
+        if (Value.isEditStatus ) {
+            Value.clearEditStatus();
+            return;
+        }
+
+        if (funcGetFiles.checkPathTop()) {
             finish();
-        else
-            funcGetFiles.getFiles(Value.ACTION_PREV, 0);
+            return;
+        }
+
+        funcGetFiles.getFiles(Value.ACTION_PREV, 0);
+        int position = funcGetFiles.logPosition.size() - 1;
+        if (position >= 0) {
+            //reback the location from log and delete the used loaction log
+            linearLayoutManager.scrollToPositionWithOffset(funcGetFiles.logPosition.get(position), funcGetFiles.logOffset.get(position));
+            funcGetFiles.logPosition.remove(position);
+            funcGetFiles.logOffset.remove(position);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case WRITE_EXTERNAL_STORAGE_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    funcGetFiles.getFiles(Value.ACTION_NONE, 0);
+                } else {
+                    // Permission Denied
+                    Toast.makeText(Explous.this, "WRITE_CONTACTS Denied!App will not running……", Toast.LENGTH_SHORT)
+                            .show();
+                    finish();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

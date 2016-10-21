@@ -1,9 +1,19 @@
 package com.explous.explous;
 
+import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.explous.explous.adapter.AudioRecyclerAdapter;
+import com.explous.explous.adapter.DocumentRecyclerAdapter;
+import com.explous.explous.adapter.FolderRecyclerAdapter;
+import com.explous.explous.adapter.ImageRecyclerAdapter;
 import com.explous.explous.adapter.RecyclerAdapter;
+import com.explous.explous.adapter.VideoRecyclerAdapter;
 import com.explous.explous.entity.DocumentItemEntity;
 import com.explous.explous.entity.FolderItemEntity;
 import com.explous.explous.entity.MediaItemEntity;
@@ -27,19 +37,61 @@ public class Value{
     public static final int AUDIO = R.id.action_audio;
     public static final int DOCUMENT = R.id.action_document;
 
+    public static boolean isEditStatus = false;
+
+    public static MenuInflater menuInflater;
+    public static Context explous = null;
     public static RecyclerAdapter adapter;
     public static Toolbar toolbar;
+    public static TextView themeHead;
+    public static LinearLayoutManager linearLayoutManager;
 
     //User for check which file type should to be show on list
     public static List<Integer> types = new ArrayList<>();
     //User for control the menu items
     public static MenuItem[] menuItems = new MenuItem[5];
 
+    public static FolderRecyclerAdapter folderRecyclerAdapter;
     public static List<FolderItemEntity> folders = new ArrayList<>();
+    public static List<Integer> folderEditChoose = new ArrayList<>();
+    public static ImageRecyclerAdapter imageRecyclerAdapter;
     public static List<MediaItemEntity> images = new ArrayList<>();
+    public static VideoRecyclerAdapter videoRecyclerAdapter;
     public static List<MediaItemEntity> videos = new ArrayList<>();
+    public static AudioRecyclerAdapter audioRecyclerAdapter;
     public static List<MediaItemEntity> audios = new ArrayList<>();
+    public static DocumentRecyclerAdapter documentRecyclerAdapter;
     public static List<DocumentItemEntity> documents = new ArrayList<>();
+
+    public static void startEditSDatus() {
+        isEditStatus = true;
+        themeHead.setBackgroundColor(explous.getResources().getColor(R.color.grey));
+        toolbar.getMenu().clear();
+        menuInflater.inflate(R.menu.menu_eidt, Value.toolbar.getMenu());
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearEditStatus();
+            }
+        });
+
+    }
+
+    public static void clearEditStatus() {
+        isEditStatus = false;
+        themeHead.setBackgroundColor(explous.getResources().getColor(R.color.base));
+        toolbar.getMenu().clear();
+        menuInflater.inflate(R.menu.menu_tag, toolbar.getMenu());
+        checkMenuItems();
+        if (folderEditChoose.size() > 0) {
+            for (Integer temp : folderEditChoose)
+                folders.get(temp).setEditStatus(false);
+            folderRecyclerAdapter.notifyDataSetChanged();
+            folderEditChoose.clear();
+            toolbar.setNavigationIcon(null);
+        }
+    }
 
     public static void clearList() {
         types.clear();
@@ -50,7 +102,7 @@ public class Value{
         documents.clear();
     }
 
-    public static void checkTypes() {
+    public static void checkMenuItems() {
         types.clear();
         if (folders.size() > 0) {
             menuItems[0].setVisible(true);

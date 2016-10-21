@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
     private Context context;
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
+    private OnTouchListener onTouchListener;
 
     public FolderRecyclerAdapter(Context context) {
         this.context = context;
@@ -35,12 +37,19 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
         void onItemLongClickListener(View view, int position);
     }
 
+    public interface OnTouchListener {
+        void onTouchListener(View view, MotionEvent motionEvent, int position);
+    }
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
         this.onItemLongClickListener = onItemLongClickListener;
+    }
+
+    public void setOnTouchListener(OnTouchListener onTouchListener) {
+        this.onTouchListener = onTouchListener;
     }
 
     @Override
@@ -53,6 +62,11 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
         FolderItemEntity temp = Value.folders.get(position);
         holder.title.setText(temp.getName());
         holder.icon.setImageResource(temp.getIcon());
+
+        if (temp.getEditStatus())
+            holder.container.setBackgroundColor(context.getResources().getColor(R.color.grey));
+        else
+            holder.container.setBackgroundColor(context.getResources().getColor(R.color.white));
         holder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,13 +74,21 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
             }
         });
 
-       /* holder.container.setOnLongClickListener(new View.OnLongClickListener() {
+       /* holder.container.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                onTouchListener.onTouchListener(view, motionEvent, position);
+                return true;
+            }
+        });*/
+
+        holder.container.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 onItemLongClickListener.onItemLongClickListener(view, position);
                 return true;
             }
-        });*/
+        });
 
     }
 

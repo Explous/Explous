@@ -14,6 +14,10 @@ import com.explous.explous.entity.FolderItemEntity;
 import com.explous.explous.entity.MediaItemEntity;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.explous.explous.Value.linearLayoutManager;
 
 /**
  * Created by Administrator on 2016/10/14.
@@ -25,6 +29,11 @@ public class GetFiles {
     public File[] files;
     private File basePath = Environment.getExternalStorageDirectory();
     public File currentPath = Environment.getExternalStorageDirectory();
+
+    //log the position of the list for reback
+    public List<Integer> logPosition = new ArrayList<>();
+    public List<Integer> logOffset = new ArrayList<>();
+
     ContentResolver cr;
     Cursor cursor;
     String[] projection = {MediaStore.Audio.Media._ID};
@@ -57,6 +66,7 @@ public class GetFiles {
                 FolderItemEntity entity = new FolderItemEntity();
                 entity.setIcon(R.mipmap.ic_launcher);
                 entity.setName(temp.getName());
+                //log the true position
                 entity.setPosition(i);
                 Value.folders.add(entity);
             } else {
@@ -64,8 +74,9 @@ public class GetFiles {
             }
         }
 
-        Value.checkTypes();
+        Value.checkMenuItems();
         Value.adapter.notifyDataSetChanged();
+        linearLayoutManager.scrollToPositionWithOffset(0, 0);
 
         if (currentPath.getName().equals("0"))
             Value.toolbar.setTitle("SDCard");

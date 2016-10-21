@@ -7,8 +7,9 @@ package com.explous.explous.entity;
 public class FolderItemEntity {
     private int icon;
     private String name;
-    private int count;
+    private int childCount;
     private int position;
+    private boolean isEditStatus;
 
     public void setIcon(int icon) {
         this.icon = icon;
@@ -24,11 +25,11 @@ public class FolderItemEntity {
         return name;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setChildCount(int childCount) {
+        this.childCount = childCount;
     }
-    public int getCount() {
-        return count;
+    public int getChildCount() {
+        return childCount;
     }
 
     public void setPosition(int position) {
@@ -36,5 +37,12 @@ public class FolderItemEntity {
     }
     public int getPosition() {
         return position;
+    }
+
+    public void setEditStatus(boolean isEditStatus) {
+        this.isEditStatus = isEditStatus;
+    }
+    public boolean getEditStatus(){
+        return isEditStatus;
     }
 }

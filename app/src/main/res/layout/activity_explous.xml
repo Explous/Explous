@@ -14,6 +14,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/theme_head"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:background="@color/base" />
@@ -37,10 +38,7 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="@dimen/drawer_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white" />
+    <include layout="@layout/custom_drawer"/>
+
 </android.support.v4.widget.DrawerLayout>
 
