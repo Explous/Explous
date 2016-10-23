@@ -3,7 +3,6 @@ package com.explous.explous.Init;
 import android.content.Context;
 import android.view.View;
 
-import com.explous.explous.R;
 import com.explous.explous.Value;
 import com.explous.explous.adapter.AudioRecyclerAdapter;
 import com.explous.explous.adapter.DocumentRecyclerAdapter;
@@ -24,8 +23,16 @@ public class InitAdapter {
             @Override
             public void onItemClickListener(View view, int position) {
                 if (Value.isEditStatus) {
+                    if (Value.folders.get(position).getEditStatus()) {
+                        Value.folders.get(position).setEditStatus(false);
+                        //change the position from int to a object and remove
+                        Value.folderEditList.remove((Integer)position);
+                        Value.folderRecyclerAdapter.notifyItemChanged(position);
+                        Value.checkEditStatus();
+                        return;
+                    }
                     Value.folders.get(position).setEditStatus(true);
-                    Value.folderEditChoose.add(position);
+                    Value.folderEditList.add(position);
                     Value.folderRecyclerAdapter.notifyItemChanged(position);
                     return;
                 }
@@ -45,9 +52,9 @@ public class InitAdapter {
                 if (Value.isEditStatus)
                     return;
 
-                Value.startEditSDatus();
+                Value.startEditStatus();
                 Value.folders.get(position).setEditStatus(true);
-                Value.folderEditChoose.add(position);
+                Value.folderEditList.add(position);
                 Value.folderRecyclerAdapter.notifyItemChanged(position);
             }
         });

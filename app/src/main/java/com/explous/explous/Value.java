@@ -53,17 +53,25 @@ public class Value{
 
     public static FolderRecyclerAdapter folderRecyclerAdapter;
     public static List<FolderItemEntity> folders = new ArrayList<>();
-    public static List<Integer> folderEditChoose = new ArrayList<>();
+    public static List<Integer> folderEditList = new ArrayList<>();
+
     public static ImageRecyclerAdapter imageRecyclerAdapter;
     public static List<MediaItemEntity> images = new ArrayList<>();
+    public static List<Integer> imageEditList = new ArrayList<>();
+
     public static VideoRecyclerAdapter videoRecyclerAdapter;
     public static List<MediaItemEntity> videos = new ArrayList<>();
+    public static List<Integer> videoEditList = new ArrayList<>();
+
     public static AudioRecyclerAdapter audioRecyclerAdapter;
     public static List<MediaItemEntity> audios = new ArrayList<>();
+    public static List<Integer> audioEditList = new ArrayList<>();
+
     public static DocumentRecyclerAdapter documentRecyclerAdapter;
     public static List<DocumentItemEntity> documents = new ArrayList<>();
+    public static List<Integer> documentEditList = new ArrayList<>();
 
-    public static void startEditSDatus() {
+    public static void startEditStatus() {
         isEditStatus = true;
         themeHead.setBackgroundColor(explous.getResources().getColor(R.color.grey));
         toolbar.getMenu().clear();
@@ -75,22 +83,60 @@ public class Value{
                 clearEditStatus();
             }
         });
+    }
 
+    public static void checkEditStatus() {
+        if (folderEditList.size() > 0)
+            return;
+        if (imageEditList.size() > 0)
+            return;
+        if(videoEditList.size() > 0)
+            return;
+        if(audioEditList.size() > 0)
+            return;
+        if(documentEditList.size() > 0)
+            return;
+        clearEditStatus();
     }
 
     public static void clearEditStatus() {
         isEditStatus = false;
         themeHead.setBackgroundColor(explous.getResources().getColor(R.color.base));
         toolbar.getMenu().clear();
+        toolbar.setNavigationIcon(null);
         menuInflater.inflate(R.menu.menu_tag, toolbar.getMenu());
         checkMenuItems();
-        if (folderEditChoose.size() > 0) {
-            for (Integer temp : folderEditChoose)
+        if (folderEditList.size() > 0) {
+            for (Integer temp : folderEditList)
                 folders.get(temp).setEditStatus(false);
             folderRecyclerAdapter.notifyDataSetChanged();
-            folderEditChoose.clear();
-            toolbar.setNavigationIcon(null);
+            folderEditList.clear();
         }
+        if (imageEditList.size() > 0) {
+            for (Integer temp : imageEditList)
+                images.get(temp).setEditStatus(false);
+            imageRecyclerAdapter.notifyDataSetChanged();
+            imageEditList.clear();
+        }
+        if (videoEditList.size() > 0) {
+            for (Integer temp : videoEditList)
+                videos.get(temp).setEditStatus(false);
+            videoRecyclerAdapter.notifyDataSetChanged();
+            videoEditList.clear();
+        }
+        if (audioEditList.size() > 0) {
+            for (Integer temp : audioEditList)
+                audios.get(temp).setEditStatus(false);
+            audioRecyclerAdapter.notifyDataSetChanged();
+            audioEditList.clear();
+        }
+        if (documentEditList.size() > 0) {
+            for (Integer temp : documentEditList)
+                images.get(temp).setEditStatus(false);
+            documentRecyclerAdapter.notifyDataSetChanged();
+            documentEditList.clear();
+        }
+
     }
 
     public static void clearList() {

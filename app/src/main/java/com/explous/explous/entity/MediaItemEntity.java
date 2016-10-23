@@ -9,6 +9,14 @@ public class MediaItemEntity {
     private int iconID;
     private String size;
     private String name;
+    private boolean isEditStatus;
+
+    public boolean isEditStatus() {
+        return isEditStatus;
+    }
+    public void setEditStatus(boolean editStatus) {
+        isEditStatus = editStatus;
+    }
 
     public void setPosition(int position) {
         this.position = position;
