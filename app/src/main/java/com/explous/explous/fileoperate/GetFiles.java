@@ -29,6 +29,7 @@ public class GetFiles {
     public File[] files;
     private File basePath = Environment.getExternalStorageDirectory();
     public File currentPath = Environment.getExternalStorageDirectory();
+    public File markPath = null;
 
     //log the position of the list for reback
     public List<Integer> logPosition = new ArrayList<>();

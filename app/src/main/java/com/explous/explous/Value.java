@@ -18,6 +18,7 @@ import com.explous.explous.entity.DocumentItemEntity;
 import com.explous.explous.entity.FolderItemEntity;
 import com.explous.explous.entity.MediaItemEntity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +47,10 @@ public class Value{
     public static TextView themeHead;
     public static LinearLayoutManager linearLayoutManager;
 
+    public static File markPath = null;
+
     //User for check which file type should to be show on list
-    public static List<Integer> types = new ArrayList<>();
+    public static List<Integer> showTypes = new ArrayList<>();
     //User for control the menu items
     public static MenuItem[] menuItems = new MenuItem[5];
 
@@ -70,6 +73,32 @@ public class Value{
     public static DocumentRecyclerAdapter documentRecyclerAdapter;
     public static List<DocumentItemEntity> documents = new ArrayList<>();
     public static List<Integer> documentEditList = new ArrayList<>();
+
+   /* public static void clearStatic() {
+        showTypes = null;
+        //User for control the menu items
+        menuItems = null;
+
+        folderRecyclerAdapter = null;
+        folders = null;
+        folderEditList = null;
+
+        imageRecyclerAdapter = null;
+        images = null;
+        imageEditList = null;
+
+        videoRecyclerAdapter = null;
+        videos = null;
+        videoEditList = null;
+
+        audioRecyclerAdapter = null;
+        audios = null;
+        audioEditList = null;
+
+        documentRecyclerAdapter = null;
+        documents = null;
+        documentEditList = null;
+    }*/
 
     public static void startEditStatus() {
         isEditStatus = true;
@@ -104,8 +133,9 @@ public class Value{
         themeHead.setBackgroundColor(explous.getResources().getColor(R.color.base));
         toolbar.getMenu().clear();
         toolbar.setNavigationIcon(null);
-        menuInflater.inflate(R.menu.menu_tag, toolbar.getMenu());
-        checkMenuItems();
+        menuInflater.inflate(R.menu.menu_base, toolbar.getMenu());
+        //initMenuItems();
+        //checkMenuItems();
         if (folderEditList.size() > 0) {
             for (Integer temp : folderEditList)
                 folders.get(temp).setEditStatus(false);
@@ -140,7 +170,7 @@ public class Value{
     }
 
     public static void clearList() {
-        types.clear();
+        showTypes.clear();
         folders.clear();
         images.clear();
         videos.clear();
@@ -148,33 +178,32 @@ public class Value{
         documents.clear();
     }
 
+    /*public static void initMenuItems() {
+        Menu menu = toolbar.getMenu();
+        menuItems[0] = menu.findItem(R.id.action_folder);
+        menuItems[1] = menu.findItem(R.id.action_image);
+        menuItems[2] = menu.findItem(R.id.action_video);
+        menuItems[3] = menu.findItem(R.id.action_audio);
+        menuItems[4] = menu.findItem(R.id.action_document);
+    }*/
+
     public static void checkMenuItems() {
-        types.clear();
+        showTypes.clear();
         if (folders.size() > 0) {
-            menuItems[0].setVisible(true);
-            types.add(FOLDER);
-        } else
-            menuItems[0].setVisible(false);
+            showTypes.add(FOLDER);
+        }
         if (images.size() > 0) {
-            menuItems[1].setVisible(true);
-            types.add(IMAGE);
-        } else
-            menuItems[1].setVisible(false);
+            showTypes.add(IMAGE);
+        }
         if (videos.size() > 0) {
-            menuItems[2].setVisible(true);
-            types.add(VIDEO);
-        } else
-            menuItems[2].setVisible(false);
+            showTypes.add(VIDEO);
+        }
         if (audios.size() > 0) {
-            menuItems[3].setVisible(true);
-            types.add(AUDIO);
-        } else
-            menuItems[3].setVisible(false);
+            showTypes.add(AUDIO);
+        }
         if (documents.size() > 0) {
-            menuItems[4].setVisible(true);
-            types.add(DOCUMENT);
-        } else
-            menuItems[4].setVisible(false);
+            showTypes.add(DOCUMENT);
+        }
     }
 
 }

@@ -22,11 +22,11 @@ import android.widget.Toast;
 
 import com.explous.explous.Init.InitAdapter;
 import com.explous.explous.adapter.RecyclerAdapter;
+import com.explous.explous.dialog.NavigationPopup;
 import com.explous.explous.fileoperate.GetFiles;
 
 import static com.explous.explous.Value.adapter;
 import static com.explous.explous.Value.linearLayoutManager;
-import static com.explous.explous.Value.menuItems;
 import static com.explous.explous.Value.toolbar;
 
 public class Explous extends AppCompatActivity {
@@ -63,7 +63,8 @@ public class Explous extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
-        } else getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,7 +76,6 @@ public class Explous extends AppCompatActivity {
         Value.explous = this;
         Value.menuInflater = getMenuInflater();
         funcGetFiles = new GetFiles(this);
-
         new InitAdapter(this, funcGetFiles);
 
         explous = (RecyclerView) findViewById(R.id.explous);
@@ -84,12 +84,14 @@ public class Explous extends AppCompatActivity {
         explous.setItemAnimator(new DefaultItemAnimator());
         adapter = new RecyclerAdapter(this);
         explous.setAdapter(adapter);
+
+        funcGetFiles.getFiles(Value.ACTION_NONE, 0);
     }
 
     private int getMenuIdPosition(int id) {
         int position;
-        for (position = 0; position < Value.types.size(); position++) {
-            Integer temp = Value.types.get(position);
+        for (position = 0; position < Value.showTypes.size(); position++) {
+            Integer temp = Value.showTypes.get(position);
             if (temp == id) break;
         }
         return position;
@@ -97,20 +99,22 @@ public class Explous extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tag, menu);
-        menuItems[0] = menu.findItem(R.id.action_folder);
-        menuItems[1] = menu.findItem(R.id.action_image);
-        menuItems[2] = menu.findItem(R.id.action_video);
-        menuItems[3] = menu.findItem(R.id.action_audio);
-        menuItems[4] = menu.findItem(R.id.action_document);
+        getMenuInflater().inflate(R.menu.menu_base, menu);
+        //Value.initMenuItems();
         //Ensure the meuitems have benn init and than get files
-        funcGetFiles.getFiles(Value.ACTION_NONE, 0);
+        //funcGetFiles.getFiles(Value.ACTION_NONE, 0);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_go:
+                new NavigationPopup(Explous.this, toolbar);
+                break;
+            case R.id.action_mark:
+                Value.markPath = funcGetFiles.currentPath;
+                break;
             case R.id.action_folder:
                 linearLayoutManager.scrollToPositionWithOffset(0, 0);
                 break;
@@ -140,6 +144,7 @@ public class Explous extends AppCompatActivity {
         }
 
         if (funcGetFiles.checkPathTop()) {
+            Value.clearEditStatus();
             finish();
             return;
         }
@@ -161,12 +166,11 @@ public class Explous extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
                     funcGetFiles.getFiles(Value.ACTION_NONE, 0);
-                } else {
-                    // Permission Denied
-                    Toast.makeText(Explous.this, "WRITE_CONTACTS Denied!App will not running……", Toast.LENGTH_SHORT)
-                            .show();
-                    finish();
+                    return;
                 }
+                // Permission Denied
+                Toast.makeText(Explous.this, "WRITE_CONTACTS Denied!App will not running……", Toast.LENGTH_SHORT).show();
+                finish();
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);

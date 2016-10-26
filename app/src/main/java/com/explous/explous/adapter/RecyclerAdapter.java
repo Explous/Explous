@@ -32,7 +32,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int i) {
-        int type = Value.types.get(i);
+        int type = Value.showTypes.get(i);
         switch (type) {
             case Value.FOLDER:
                 holder.title.setText(R.string.folder);
@@ -72,7 +72,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return Value.types.size();
+        return Value.showTypes.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
