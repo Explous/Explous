@@ -28,7 +28,7 @@ public class PopupNavigationAdapter extends RecyclerView.Adapter<PopupNavigation
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (position > Value.showTypes.size()) {
+        if (position >= Value.showTypes.size()) {
             holder.title.setText(Value.markPath.getName());
             return;
         }
