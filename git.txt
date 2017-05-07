@@ -1,0 +1,8 @@
+app
+build.gradle
+git.txt
+gradle
+gradle.properties
+gradlew
+gradlew.bat
+settings.gradle
